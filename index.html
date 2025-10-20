@@ -157,45 +157,45 @@
         }
 
         .glitch {
-            font-size: 4rem;
+            font-size: 5.5rem;
             font-weight: 900;
             text-transform: uppercase;
             position: relative;
             color: var(--accent-green);
-            text-shadow: 0.05em 0 0 var(--accent-green-light), -0.025em -0.05em 0 var(--accent-green-dark),
-                         0.025em 0.05em 0 var(--accent-green);
-            animation: glitch 500ms infinite;
-            letter-spacing: 3px;
+            text-shadow: 0.02em 0 0 var(--accent-green-light), -0.01em -0.02em 0 var(--accent-green-dark),
+                         0.01em 0.02em 0 var(--accent-green);
+            animation: glitch 700ms infinite;
+            letter-spacing: 4px;
         }
 
         @keyframes glitch {
             0% {
-                text-shadow: 0.05em 0 0 var(--accent-green-light), -0.025em -0.05em 0 var(--accent-green-dark),
-                             0.025em 0.05em 0 var(--accent-green);
+                text-shadow: 0.02em 0 0 var(--accent-green-light), -0.01em -0.02em 0 var(--accent-green-dark),
+                             0.01em 0.02em 0 var(--accent-green);
             }
             14% {
-                text-shadow: 0.05em 0 0 var(--accent-green-light), -0.025em -0.05em 0 var(--accent-green-dark),
-                             0.025em 0.05em 0 var(--accent-green);
+                text-shadow: 0.02em 0 0 var(--accent-green-light), -0.01em -0.02em 0 var(--accent-green-dark),
+                             0.01em 0.02em 0 var(--accent-green);
             }
             15% {
-                text-shadow: -0.05em -0.025em 0 var(--accent-green-light), 0.025em 0.025em 0 var(--accent-green-dark),
-                             -0.05em -0.05em 0 var(--accent-green);
+                text-shadow: -0.02em -0.01em 0 var(--accent-green-light), 0.01em 0.01em 0 var(--accent-green-dark),
+                             -0.02em -0.02em 0 var(--accent-green);
             }
             49% {
-                text-shadow: -0.05em -0.025em 0 var(--accent-green-light), 0.025em 0.025em 0 var(--accent-green-dark),
-                             -0.05em -0.05em 0 var(--accent-green);
+                text-shadow: -0.02em -0.01em 0 var(--accent-green-light), 0.01em 0.01em 0 var(--accent-green-dark),
+                             -0.02em -0.02em 0 var(--accent-green);
             }
             50% {
-                text-shadow: 0.025em 0.05em 0 var(--accent-green-light), 0.05em 0 0 var(--accent-green-dark),
-                             0 -0.05em 0 var(--accent-green);
+                text-shadow: 0.01em 0.02em 0 var(--accent-green-light), 0.02em 0 0 var(--accent-green-dark),
+                             0 -0.02em 0 var(--accent-green);
             }
             99% {
-                text-shadow: 0.025em 0.05em 0 var(--accent-green-light), 0.05em 0 0 var(--accent-green-dark),
-                             0 -0.05em 0 var(--accent-green);
+                text-shadow: 0.01em 0.02em 0 var(--accent-green-light), 0.02em 0 0 var(--accent-green-dark),
+                             0 -0.02em 0 var(--accent-green);
             }
             100% {
-                text-shadow: -0.025em 0 0 var(--accent-green-light), -0.025em -0.025em 0 var(--accent-green-dark),
-                             -0.025em -0.05em 0 var(--accent-green);
+                text-shadow: -0.01em 0 0 var(--accent-green-light), -0.01em -0.01em 0 var(--accent-green-dark),
+                             -0.01em -0.02em 0 var(--accent-green);
             }
         }
 
@@ -591,7 +591,7 @@
 
         @media (max-width: 768px) {
             .glitch {
-                font-size: 2.5rem;
+                font-size: 3rem;
             }
 
             .about-content {
