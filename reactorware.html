@@ -509,7 +509,7 @@
                     if (distance < 100) {
                         ctx.strokeStyle = `rgba(0, 255, 65, ${0.2 * (1 - distance / 100)})`;
                         ctx.lineWidth = 0.5;
-                        ctx.beginPath();
+                        ctx.be01ginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
                         ctx.stroke();
