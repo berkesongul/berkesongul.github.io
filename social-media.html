@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sosyal Medya Portföy Yönetimi - Berke Songul</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0f0d;
+            --accent-green: #00ff41;
+            --accent-green-dark: #00cc33;
+            --accent-green-light: #39ff14;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Scanline efekti */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 65, 0.03) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(0, 255, 65, 0.03) 3px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Grid arka plan */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--accent-green);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        nav a:hover {
+            color: var(--accent-green);
+            text-shadow: 0 0 10px var(--accent-green);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .project-hero {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            background: linear-gradient(180deg, rgba(0, 255, 65, 0.05) 0%, transparent 100%);
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--accent-green);
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 900px;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid var(--accent-green);
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.4);
+            animation: fadeInUp 1s ease-out 0.5s both;
+            margin: 0 auto;
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .project-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .content-section {
+            margin-bottom: 4rem;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--accent-green);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section-title::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--accent-green);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .content-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            padding: 1.5rem;
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px solid var(--accent-green);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 255, 65, 0.3);
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            color: var(--accent-green-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 255, 65, 0.05);
+            border: 2px solid var(--accent-green);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.4);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--accent-green);
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .tech-tag {
+            padding: 0.8rem 1.5rem;
+            background: rgba(0, 255, 65, 0.1);
+            border: 2px solid var(--accent-green);
+            border-radius: 25px;
+            color: var(--accent-green);
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tech-tag:hover {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            box-shadow: 0 0 20px var(--accent-green);
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: transparent;
+            border: 2px solid var(--accent-green);
+            color: var(--accent-green);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 3rem;
+        }
+
+        .back-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-green);
+            transition: left 0.3s;
+            z-index: -1;
+        }
+
+        .back-button:hover::before {
+            left: 0;
+        }
+
+        .back-button:hover {
+            color: var(--bg-primary);
+            box-shadow: 0 0 25px var(--accent-green);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero-image {
+                height: 300px;
+            }
+
+            nav ul {
+                gap: 1rem;
+                font-size: 0.8rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles"></canvas>
+    
+    <nav>
+        <ul>
+            <li><a href="index.html#hero">Ana Sayfa</a></li>
+            <li><a href="index.html#about">Hakkımda</a></li>
+            <li><a href="index.html#projects">Projeler</a></li>
+            <li><a href="index.html#skills">Yetenekler</a></li>
+            <li><a href="index.html#contact">İletişim</a></li>
+        </ul>
+    </nav>
+
+    <div class="project-hero">
+        <div class="hero-content">
+            <h1 class="hero-title">SOSYAL MEDYA PORTFÖY YÖNETİMİ</h1>
+            <p class="hero-subtitle">Meta Business & Instagram Reklam Optimizasyonu</p>
+            <img src="img/social-media.jpg" alt="Sosyal Medya Yönetimi" class="hero-image">
+        </div>
+    </div>
+
+    <div class="project-content">
+        
+        <div class="content-section">
+            <h2 class="section-title">Proje Hakkında</h2>
+            <p class="content-text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. İşletmelerin dijital varlıklarını güçlendirmek ve ROI'yi maksimize etmek için kapsamlı sosyal medya yönetim hizmetleri sunuyorum. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <p class="content-text">
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Veri odaklı stratejiler ve sürekli optimizasyon ile markaların büyümesine katkı sağlıyorum. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">İstatistikler</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">8+</div>
+                    <div class="stat-label">Aktif Müşteri</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">150K+</div>
+                    <div class="stat-label">Erişim/Ay</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">%85</div>
+                    <div class="stat-label">ROI Artışı</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Monitoring</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Hizmetler</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3 class="feature-title">Kampanya Yönetimi</h3>
+                    <p class="content-text">Lorem ipsum dolor sit amet. Meta Business Suite üzerinden profesyonel reklam kampanyaları.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Bütçe Optimizasyonu</h3>
+                    <p class="content-text">Sed do eiusmod tempor incididunt. Maksimum verimlilik için dinamik bütçe yönetimi.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Hedef Kitle Analizi</h3>
+                    <p class="content-text">Magna aliqua ut enim ad minim. Detaylı demografik ve davranışsal hedefleme.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">İçerik Stratejisi</h3>
+                    <p class="content-text">Quis nostrud exercitation ullamco. Engagement odaklı kreatif içerik üretimi.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">A/B Testing</h3>
+                    <p class="content-text">Duis aute irure dolor. Sürekli iyileştirme için kapsamlı test süreçleri.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Raporlama</h3>
+                    <p class="content-text">Excepteur sint occaecat. Haftalık performans raporları ve insight'lar.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Çalışma Süreci</h2>
+            <p class="content-text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Her işletme için özel strateji geliştirme sürecimiz, detaylı pazar araştırması ile başlar. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <p class="content-text">
+                <strong>1. Analiz & Planlama:</strong> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Mevcut durum analizi ve hedef belirleme.
+            </p>
+            <p class="content-text">
+                <strong>2. Strateji Geliştirme:</strong> Duis aute irure dolor in reprehenderit in voluptate velit. İçerik takvimi ve kampanya planlaması.
+            </p>
+            <p class="content-text">
+                <strong>3. Uygulama:</strong> Excepteur sint occaecat cupidatat non proident. Kampanya lansmanı ve aktif yönetim.
+            </p>
+            <p class="content-text">
+                <strong>4. Optimizasyon:</strong> Sunt in culpa qui officia deserunt mollit anim. Sürekli A/B testing ve iyileştirmeler.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Kullanılan Platformlar & Araçlar</h2>
+            <div class="tech-tags">
+                <span class="tech-tag">Meta Business Suite</span>
+                <span class="tech-tag">Facebook Ads Manager</span>
+                <span class="tech-tag">Instagram Insights</span>
+                <span class="tech-tag">Google Analytics</span>
+                <span class="tech-tag">Canva</span>
+                <span class="tech-tag">Buffer</span>
+                <span class="tech-tag">Hootsuite</span>
+                <span class="tech-tag">Meta Pixel</span>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Başarı Hikayeleri</h2>
+            <p class="content-text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. E-ticaret, restoran, eğitim ve hizmet sektöründeki müşterilerimiz ile birlikte önemli başarılara imza attık. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <p class="content-text">
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Ortalama %85 ROI artışı ve %120 engagement artışı sağladık. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">İletişime Geçin</h2>
+            <p class="content-text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Markanızın dijital büyümesi için profesyonel sosyal medya yönetim hizmeti almak isterseniz benimle iletişime geçebilirsiniz. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+        </div>
+
+        <a href="index.html#projects" class="back-button">← Ana Sayfaya Dön</a>
+    </div>
+
+    <script>
+        // Parçacık animasyonu
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(0, 255, 65, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.strokeStyle = `rgba(0, 255, 65, ${0.2 * (1 - distance / 100)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

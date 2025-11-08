@@ -29,6 +29,25 @@
             line-height: 1.6;
         }
 
+        /* Matrix Rain Transition Overlay */
+        #matrix-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        #matrix-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
         /* Scanline efekti */
         body::before {
             content: '';
@@ -323,18 +342,6 @@
 
         .code-line {
             margin: 0.5rem 0;
-            animation: typeIn 0.5s ease-out;
-        }
-
-        @keyframes typeIn {
-            from {
-                opacity: 0;
-                width: 0;
-            }
-            to {
-                opacity: 1;
-                width: 100%;
-            }
         }
 
         .code-comment {
@@ -351,7 +358,7 @@
 
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
         }
 
@@ -359,12 +366,22 @@
             background: var(--bg-secondary);
             border: 2px solid rgba(0, 255, 65, 0.3);
             border-radius: 12px;
-            padding: 2rem;
+            overflow: hidden;
             transition: all 0.3s;
             cursor: pointer;
             position: relative;
-            overflow: hidden;
             transform: translateY(0);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 2px solid rgba(0, 255, 65, 0.3);
+        }
+
+        .project-content {
+            padding: 2rem;
         }
 
         .project-card::before {
@@ -416,12 +433,14 @@
         .project-desc {
             color: var(--text-secondary);
             margin-bottom: 1rem;
+            line-height: 1.6;
         }
 
         .project-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .tag {
@@ -439,6 +458,43 @@
             color: var(--bg-primary);
             box-shadow: 0 0 15px var(--accent-green);
             transform: scale(1.1);
+        }
+
+        .project-link {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: transparent;
+            border: 2px solid var(--accent-green);
+            color: var(--accent-green);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-green);
+            transition: left 0.3s;
+            z-index: -1;
+        }
+
+        .project-link:hover::before {
+            left: 0;
+        }
+
+        .project-link:hover {
+            color: var(--bg-primary);
+            box-shadow: 0 0 20px var(--accent-green);
         }
 
         .skills-grid {
@@ -576,19 +632,6 @@
             transform: translateY(-3px);
         }
 
-        /* Scroll animasyonları için */
-        .fade-in {
-            opacity: 0;
-            animation: fadeInUp 1s ease-out forwards;
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         @media (max-width: 768px) {
             .glitch {
                 font-size: 3rem;
@@ -611,11 +654,16 @@
                 padding: 0.8rem 1.5rem;
                 font-size: 0.9rem;
             }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <canvas id="particles"></canvas>
+    <canvas id="matrix-transition"></canvas>
     
     <nav>
         <ul>
@@ -666,33 +714,95 @@
         <div class="container">
             <h2 class="section-title">Projeler</h2>
             <div class="projects-grid">
-                <div class="project-card">
-                    <h3 class="project-title">Reactorware</h3>
-                    <p class="project-desc">Bir şekilde stabil durmayan Nükleer Reaktör çekirdeği için laboratuvardaki tüm sorunları çözüp reaktör stabilizasyonunu arttırdığınız tek kişilik bir oyun.</p>
-                    <div class="project-tags">
-                        <span class="tag">C#</span>
-                        <span class="tag">Unity Engine</span>
-                        <span class="tag">GitHub</span>
+                
+                <!-- Proje 1: Sosyal Medya -->
+                <div class="project-card" onclick="navigateWithMatrix('social-media.html')">
+                    <img src="img/social-media.jpg" alt="Sosyal Medya Portföy Yönetimi" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">Sosyal Medya Portföy Yönetimi</h3>
+                        <p class="project-desc">İşletmelerin sosyal medya ve Meta Business reklam portföylerini bütçe ve optimizasyon baz alarak yönetiyor ve beraber büyüyoruz.</p>
+                        <div class="project-tags">
+                            <span class="tag">Meta Business</span>
+                            <span class="tag">Portföy Yönetimi</span>
+                            <span class="tag">Instagram</span>
+                        </div>
+                        <a href="social-media.html" class="project-link" onclick="event.stopPropagation(); navigateWithMatrix('social-media.html')">Detayları Gör</a>
                     </div>
                 </div>
-                <div class="project-card">
-                    <h3 class="project-title">Web Site Projeleri</h3>
-                    <p class="project-desc">Türkiye'nin birçok konumunda işletmelerin ihtiyaçları doğrultusundaki statik tanıtım web siteleri hazırladım. Sunucumda bulunan site sayısı 8.</p>
-                    <div class="project-tags">
-                        <span class="tag">HTML</span>
-                        <span class="tag">CSS</span>
-                        <span class="tag">JavaScript</span>
+
+                <!-- Proje 2: Reactorware -->
+                <div class="project-card" onclick="navigateWithMatrix('reactorware.html')">
+                    <img src="img/reactorware.jpg" alt="Reactorware" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">Reactorware</h3>
+                        <p class="project-desc">Bir şekilde stabil durmayan Nükleer Reaktör çekirdeği için laboratuvardaki tüm sorunları çözüp reaktör stabilizasyonunu arttırdığınız tek kişilik bir oyun.</p>
+                        <div class="project-tags">
+                            <span class="tag">C#</span>
+                            <span class="tag">Unity Engine</span>
+                            <span class="tag">GitHub</span>
+                        </div>
+                        <a href="reactorware.html" class="project-link" onclick="event.stopPropagation(); navigateWithMatrix('reactorware.html')">Detayları Gör</a>
                     </div>
                 </div>
-                <div class="project-card">
-                    <h3 class="project-title">Sosyal Medya Reklam Portföyü</h3>
-                    <p class="project-desc">İşletmelerin sosyal medya ve Meta Business reklam portföylerini bütçe ve optimizasyon baz alarak yönetiyor ve beraber büyüyoruz.</p>
-                    <div class="project-tags">
-                        <span class="tag">Meta Business</span>
-                        <span class="tag">Portföy Yönetimi</span>
-                        <span class="tag">Instagram</span>
+
+                <!-- Proje 3: Soma FM Web -->
+                <div class="project-card" onclick="navigateWithMatrix('somafm-web.html')">
+                    <img src="img/somafm-web.jpg" alt="Soma FM Web Site" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">Soma FM Web Site</h3>
+                        <p class="project-desc">Modern ve kullanıcı dostu arayüzü ile Soma FM radyo istasyonu için geliştirilmiş web platformu. Canlı yayın ve podcast entegrasyonu.</p>
+                        <div class="project-tags">
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">JavaScript</span>
+                        </div>
+                        <a href="somafm-web.html" class="project-link" onclick="event.stopPropagation(); navigateWithMatrix('somafm-web.html')">Detayları Gör</a>
                     </div>
                 </div>
+
+                <!-- Proje 4: Soma FM Mobile -->
+                <div class="project-card" onclick="navigateWithMatrix('somafm-mobile.html')">
+                    <img src="img/somafm-mobile.jpg" alt="Soma FM Mobile App" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">Soma FM Mobile App</h3>
+                        <p class="project-desc">iOS ve Android platformları için geliştirilmiş Soma FM mobil uygulaması. Offline dinleme ve bildirim özellikleri ile tam deneyim.</p>
+                        <div class="project-tags">
+                            <span class="tag">React Native</span>
+                            <span class="tag">Firebase</span>
+                            <span class="tag">API</span>
+                        </div>
+                        <a href="somafm-mobile.html" class="project-link" onclick="event.stopPropagation(); navigateWithMatrix('somafm-mobile.html')">Detayları Gör</a>
+                    </div>
+                </div>
+
+                <!-- Proje 5: Placeholder -->
+                <div class="project-card" onclick="navigateWithMatrix('project5.html')">
+                    <img src="img/project5.jpg" alt="Proje 5" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">Proje 5</h3>
+                        <p class="project-desc">Yakında burada yeni bir proje yer alacak. Modern teknolojiler kullanılarak geliştirilecek bu proje için çalışmalar devam ediyor.</p>
+                        <div class="project-tags">
+                            <span class="tag">Coming Soon</span>
+                            <span class="tag">2025</span>
+                        </div>
+                        <a href="project5.html" class="project-link" onclick="event.stopPropagation(); navigateWithMatrix('project5.html')">Detayları Gör</a>
+                    </div>
+                </div>
+
+                <!-- Proje 6: Placeholder -->
+                <div class="project-card" onclick="navigateWithMatrix('project6.html')">
+                    <img src="img/project6.jpg" alt="Proje 6" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">Proje 6</h3>
+                        <p class="project-desc">Bu alanda gelecekteki projeleriniz için yer ayrılmıştır. Yeni fikirler ve inovatif çözümler için alan hazır.</p>
+                        <div class="project-tags">
+                            <span class="tag">Coming Soon</span>
+                            <span class="tag">Innovation</span>
+                        </div>
+                        <a href="project6.html" class="project-link" onclick="event.stopPropagation(); navigateWithMatrix('project6.html')">Detayları Gör</a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -840,6 +950,49 @@
                 }
             });
         });
+
+        // Matrix Rain Transition
+        function navigateWithMatrix(url) {
+            const matrixCanvas = document.getElementById('matrix-transition');
+            const matrixCtx = matrixCanvas.getContext('2d');
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
+
+            const overlay = document.createElement('div');
+            overlay.id = 'matrix-transition';
+            overlay.className = 'active';
+            document.body.appendChild(overlay);
+            overlay.appendChild(matrixCanvas);
+
+            const columns = Math.floor(matrixCanvas.width / 20);
+            const drops = Array(columns).fill(1);
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+
+            function drawMatrix() {
+                matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+
+                matrixCtx.fillStyle = '#00ff41';
+                matrixCtx.font = '15px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    matrixCtx.fillText(text, i * 20, drops[i] * 20);
+
+                    if (drops[i] * 20 > matrixCanvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            const interval = setInterval(drawMatrix, 33);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                window.location.href = url;
+            }, 1000);
+        }
     </script>
 </body>
 </html>
