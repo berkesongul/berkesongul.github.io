@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soma FM Web Site - Berke Songul</title>
+    <style>
+        /* Genel CSS aynı kalmıştır */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0f0d;
+            --accent-green: #00ff41;
+            --accent-green-dark: #00cc33;
+            --accent-green-light: #39ff14;
+            --text-primary: #e0e6ed;
+            --text-secondary: #8892b0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Scanline efekti */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 65, 0.03) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(0, 255, 65, 0.03) 3px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Grid arka plan */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--accent-green);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+        /* Matrix geçiş konteyneri için stil - Matrix geçişi Ana Sayfada kullanılacağı için burada sadece geri dönüş için gerekli */
+        #matrix-transition-container { 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        #matrix-transition-container.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        nav a:hover {
+            color: var(--accent-green);
+            text-shadow: 0 0 10px var(--accent-green);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .project-hero {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            background: linear-gradient(180deg, rgba(0, 255, 65, 0.05) 0%, transparent 100%);
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--accent-green);
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 900px;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid var(--accent-green);
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.4);
+            animation: fadeInUp 1s ease-out 0.5s both;
+            margin: 0 auto;
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .project-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .content-section {
+            margin-bottom: 4rem;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--accent-green);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section-title::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--accent-green);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .content-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            padding: 1.5rem;
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px solid var(--accent-green);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 255, 65, 0.3);
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            color: var(--accent-green-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .tech-tag {
+            padding: 0.8rem 1.5rem;
+            background: rgba(0, 255, 65, 0.1);
+            border: 2px solid var(--accent-green);
+            border-radius: 25px;
+            color: var(--accent-green);
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tech-tag:hover {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            box-shadow: 0 0 20px var(--accent-green);
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: transparent;
+            border: 2px solid var(--accent-green);
+            color: var(--accent-green);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 3rem;
+            /* Matrix geçişini tetiklemek için cursor pointer tutulur */
+        }
+
+        .back-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-green);
+            transition: left 0.3s;
+            z-index: -1;
+        }
+
+        .back-button:hover::before {
+            left: 0;
+        }
+
+        .back-button:hover {
+            color: var(--bg-primary);
+            box-shadow: 0 0 25px var(--accent-green);
+            transform: translateY(-3px);
+        }
+        
+        /* Footer Stilleri (index.html'den kopyalanmıştır) */
+        footer {
+            background: var(--bg-secondary);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            border-top: 2px solid var(--accent-green);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-content p {
+            margin: 0.5rem 0;
+        }
+
+        .footer-content a {
+            color: var(--accent-green);
+            text-decoration: none;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        .footer-content a:hover {
+            color: var(--accent-green-light);
+            text-shadow: 0 0 10px var(--accent-green);
+        }
+
+        /* Footer Divider Effect */
+        footer::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--accent-green) 0%,
+                transparent 1%,
+                transparent 2%
+            );
+            margin-bottom: 1rem;
+            animation: scanlineMove 10s linear infinite;
+        }
+
+        @keyframes scanlineMove {
+            0% { background-position: 0% 0; }
+            100% { background-position: 100% 0; }
+        }
+
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero-image {
+                height: 300px;
+            }
+
+            nav ul {
+                gap: 1rem;
+                font-size: 0.8rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            footer {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles"></canvas>
+    <div id="matrix-transition-container"></div>
+    
+    <nav>
+        <ul>
+                        <li><a href="index.html#hero">Ana Sayfa</a></li>
+            <li><a href="index.html#about">Hakkımda</a></li>
+            <li><a href="index.html#projects">Projeler</a></li>
+            <li><a href="index.html#skills">Yetenekler</a></li>
+            <li><a href="index.html#contact">İletişim</a></li>
+        </ul>
+    </nav>
+
+    <div class="project-hero">
+        <div class="hero-content">
+            <h1 class="hero-title">SOMA FM WEB SİTESİ</h1>
+            <p class="hero-subtitle">Modern Tasarımlı Radyo Yayın Platformu</p>
+            <img src="img/somafm-web.jpg" alt="Soma FM Web Sitesi Arayüzü" class="hero-image">
+        </div>
+    </div>
+
+    <div class="project-content">
+        
+        <div class="content-section">
+            <h2 class="section-title">Proje Özeti</h2>
+            <p class="content-text">
+                Soma FM, internet radyoları arasında minimalist ve yüksek kaliteli yayınlarıyla bilinen bir platformdur. Bu proje, mevcut Soma FM deneyimini **modern web standartları** ile yeniden tasarlayarak kullanıcılara daha akıcı, hızlı ve görsel açıdan daha zengin bir arayüz sunmayı amaçlamıştır.
+            </p>
+            <p class="content-text">
+                Projede, yayınların **gerçek zamanlı akışını** sağlamak ve **güncel parça bilgilerini** anlık olarak getirmek için Soma FM'in sağladığı API servisleri kullanıldı. Odak noktası, yüksek performanslı ve erişilebilir bir radyo deneyimi oluşturmaktı.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Temel Özellikler</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3 class="feature-title">Gerçek Zamanlı API Entegrasyonu</h3>
+                    <p class="content-text">Soma FM API'dan aktif kanal listesi, o an çalan parça ve yayın durumunu anlık olarak çeker.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Kanal Filtreleme ve Arama</h3>
+                    <p class="content-text">Kullanıcıların aradıkları müzik türüne veya ruh haline göre kanalları kolayca filtrelemesini sağlar.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Responsive (Duyarlı) Tasarım</h3>
+                    <p class="content-text">Masaüstü, tablet ve mobil cihazlarda kesintisiz ve estetik bir dinleme deneyimi sunar.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Karanlık Mod (Varsayılan)</h3>
+                    <p class="content-text">Göz yorgunluğunu azaltmak ve siberpunk temasına uymak için varsayılan olarak karanlık mod kullanıldı.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Tasarım ve Kullanıcı Deneyimi</h2>
+            <p class="content-text">
+                Proje, **minimalist** ve **fonksiyon odaklı** bir yaklaşımla tasarlandı. Kullanıcının radyo akışına hızla ulaşması ve kanallar arasında kolayca geçiş yapması hedeflendi. Özellikle Matrix temasının temel renk paleti olan yeşil ve siyah, arayüzün dinamik ve fütüristik bir hava kazanmasını sağladı.
+            </p>
+            <p class="content-text">
+                Müzik keyfini bozacak hiçbir gereksiz öğe bulunmamaktadır. Kontroller basit ve büyüktür, bu sayede dokunmatik cihazlarda da kolayca kullanılabilir.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Kullanılan Teknolojiler</h2>
+            <div class="tech-tags">
+                <span class="tech-tag">HTML5</span>
+                <span class="tech-tag">CSS3 / Flexbox & Grid</span>
+                <span class="tech-tag">Vanilla JavaScript</span>
+                <span class="tech-tag">Soma FM Public API</span>
+                <span class="tech-tag">Web Audio API (Kontrol)</span>
+                <span class="tech-tag">Git & GitHub Pages</span>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2 class="section-title">Gelecek Planları</h2>
+            <p class="content-text">
+                Gelecekte, projeyi bir **React/Vue** yapısına taşımak ve yayın kalitesini manuel seçme, favori kanal listesi oluşturma gibi özellikler eklemek hedeflenmektedir. Ayrıca, `somafm-mobile` uygulamasıyla sorunsuz bir entegrasyon sağlamak da önceliklidir.
+            </p>
+        </div>
+
+                <a href="#" class="back-button" onclick="navigateWithMatrix('index.html#projects'); return false;">
+            ← Ana Sayfaya Dön
+        </a>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p id="copyright">© 2025 Berke Songul. Tüm hakları gizlidir.</p> 
+            <p>Bu site, <a href="https://github.com/berkesongul/berkesongul.github.io" target="_blank">Berke Songul'un GitHub deposu</a> üzerinde Matrix/Siberpunk temasıyla geliştirilmiştir.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Telif hakkı yılını otomatik olarak ayarla (Footer için)
+        document.getElementById('copyright').textContent = `© ${new Date().getFullYear()} Berke Songul. Tüm hakları gizlidir.`;
+
+        // Parçacık animasyonu (Buradaki kod önceki hataları içermiyordu, sadece parçacıklar)
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(0, 255, 65, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.strokeStyle = `rgba(0, 255, 65, ${0.2 * (1 - distance / 100)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        
+        // Matrix Rain Transition FONKSİYONU - Index.html'den kopyalanmıştır.
+        function navigateWithMatrix(url) {
+            const container = document.getElementById('matrix-transition-container');
+            
+            // Dinamik olarak yeni canvas oluştur ve kapsayıcıya ekle
+            let matrixCanvas = document.createElement('canvas');
+            matrixCanvas.id = 'dynamic-matrix-canvas';
+            container.appendChild(matrixCanvas);
+            
+            const matrixCtx = matrixCanvas.getContext('2d');
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
+
+            // Container'ı etkinleştir
+            container.classList.add('active');
+
+            const columns = Math.floor(matrixCanvas.width / 20);
+            const drops = Array(columns).fill(1);
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+
+            function drawMatrix() {
+                matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+
+                matrixCtx.fillStyle = '#00ff41';
+                matrixCtx.font = '15px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    matrixCtx.fillText(text, i * 20, drops[i] * 20);
+
+                    if (drops[i] * 20 > matrixCanvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            const interval = setInterval(drawMatrix, 33);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                window.location.href = url;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

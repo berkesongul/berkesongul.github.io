@@ -29,8 +29,8 @@
             line-height: 1.6;
         }
 
-        /* Matrix Rain Transition Overlay */
-        #matrix-transition {
+        /* Matrix Rain Transition Overlay - Düzeltildi: Sadece kapsayıcı div */
+        #matrix-transition-container {
             position: fixed;
             top: 0;
             left: 0;
@@ -43,7 +43,7 @@
             transition: opacity 0.3s;
         }
 
-        #matrix-transition.active {
+        #matrix-transition-container.active {
             opacity: 1;
             pointer-events: all;
         }
@@ -64,7 +64,7 @@
                 rgba(0, 255, 65, 0.03) 3px
             );
             pointer-events: none;
-            z-index: 9999;
+            z-index: 9999; /* Z-index düşürüldü, içerikten yukarıda, Matrix'ten altta. */
         }
 
         /* Grid arka plan */
@@ -83,7 +83,7 @@
             z-index: -2;
         }
 
-        canvas {
+        canvas#particles {
             position: fixed;
             top: 0;
             left: 0;
@@ -632,6 +632,63 @@
             transform: translateY(-3px);
         }
 
+        /* Footer Stilleri */
+        footer {
+            background: var(--bg-secondary);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            border-top: 2px solid var(--accent-green);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-content p {
+            margin: 0.5rem 0;
+        }
+
+        .footer-content a {
+            color: var(--accent-green);
+            text-decoration: none;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        .footer-content a:hover {
+            color: var(--accent-green-light);
+            text-shadow: 0 0 10px var(--accent-green);
+        }
+
+        /* Footer Divider Effect */
+        footer::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--accent-green) 0%,
+                transparent 1%,
+                transparent 2%
+            );
+            margin-bottom: 1rem;
+            animation: scanlineMove 10s linear infinite;
+        }
+
+        @keyframes scanlineMove {
+            0% { background-position: 0% 0; }
+            100% { background-position: 100% 0; }
+        }
+
         @media (max-width: 768px) {
             .glitch {
                 font-size: 3rem;
@@ -658,12 +715,16 @@
             .projects-grid {
                 grid-template-columns: 1fr;
             }
+
+            footer {
+                padding: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <canvas id="particles"></canvas>
-    <canvas id="matrix-transition"></canvas>
+    <div id="matrix-transition-container"></div>
     
     <nav>
         <ul>
@@ -694,16 +755,16 @@
                 <div class="code-block">
                     <div class="code-line"><span class="code-comment">// Kişisel Bilgiler</span></div>
                     <div class="code-line"><span class="code-keyword">const</span> developer = {</div>
-                    <div class="code-line">  name: <span class="code-string">"Berke Songul"</span>,</div>
-                    <div class="code-line">  role: <span class="code-string">"Software Developer"</span>,</div>
-                    <div class="code-line">  education: <span class="code-string">"DEU - Fizik"</span>,</div>
-                    <div class="code-line">  interests: [</div>
-                    <div class="code-line">    <span class="code-string">"Game Developing"</span>,</div>
-                    <div class="code-line">    <span class="code-string">"Web Developing"</span>,</div>
-                    <div class="code-line">    <span class="code-string">"Big Data"</span>,</div>
-                    <div class="code-line">    <span class="code-string">"AI & ML"</span>,</div>
-                    <div class="code-line">    <span class="code-string">"Drums & Metal"</span></div>
-                    <div class="code-line">  ]</div>
+                    <div class="code-line">  name: <span class="code-string">"Berke Songul"</span>,</div>
+                    <div class="code-line">  role: <span class="code-string">"Software Developer"</span>,</div>
+                    <div class="code-line">  education: <span class="code-string">"DEU - Fizik"</span>,</div>
+                    <div class="code-line">  interests: [</div>
+                    <div class="code-line">    <span class="code-string">"Game Developing"</span>,</div>
+                    <div class="code-line">    <span class="code-string">"Web Developing"</span>,</div>
+                    <div class="code-line">    <span class="code-string">"Big Data"</span>,</div>
+                    <div class="code-line">    <span class="code-string">"AI & ML"</span>,</div>
+                    <div class="code-line">    <span class="code-string">"Drums & Metal"</span></div>
+                    <div class="code-line">  ]</div>
                     <div class="code-line">};</div>
                 </div>
             </div>
@@ -715,7 +776,6 @@
             <h2 class="section-title">Projeler</h2>
             <div class="projects-grid">
                 
-                <!-- Proje 1: Sosyal Medya -->
                 <div class="project-card" onclick="navigateWithMatrix('social-media.html')">
                     <img src="img/social-media.jpg" alt="Sosyal Medya Portföy Yönetimi" class="project-image">
                     <div class="project-content">
@@ -726,11 +786,10 @@
                             <span class="tag">Portföy Yönetimi</span>
                             <span class="tag">Instagram</span>
                         </div>
-                        <a href="social-media.html" class="project-link" onclick="event.stopPropagation(); navigateWithMatrix('social-media.html')">Detayları Gör</a>
+                        <a href="social-media.html" class="project-link">Detayları Gör</a>
                     </div>
                 </div>
 
-                <!-- Proje 2: Reactorware -->
                 <div class="project-card" onclick="navigateWithMatrix('reactorware.html')">
                     <img src="img/reactorware.jpg" alt="Reactorware" class="project-image">
                     <div class="project-content">
@@ -741,11 +800,10 @@
                             <span class="tag">Unity Engine</span>
                             <span class="tag">GitHub</span>
                         </div>
-                        <a href="reactorware.html" class="project-link" onclick="event.stopPropagation(); navigateWithMatrix('reactorware.html')">Detayları Gör</a>
+                        <a href="reactorware.html" class="project-link">Detayları Gör</a>
                     </div>
                 </div>
 
-                <!-- Proje 3: Soma FM Web -->
                 <div class="project-card" onclick="navigateWithMatrix('somafm-web.html')">
                     <img src="img/somafm-web.jpg" alt="Soma FM Web Site" class="project-image">
                     <div class="project-content">
@@ -756,11 +814,10 @@
                             <span class="tag">CSS</span>
                             <span class="tag">JavaScript</span>
                         </div>
-                        <a href="somafm-web.html" class="project-link" onclick="event.stopPropagation(); navigateWithMatrix('somafm-web.html')">Detayları Gör</a>
+                        <a href="somafm-web.html" class="project-link">Detayları Gör</a>
                     </div>
                 </div>
 
-                <!-- Proje 4: Soma FM Mobile -->
                 <div class="project-card" onclick="navigateWithMatrix('somafm-mobile.html')">
                     <img src="img/somafm-mobile.jpg" alt="Soma FM Mobile App" class="project-image">
                     <div class="project-content">
@@ -771,11 +828,10 @@
                             <span class="tag">Firebase</span>
                             <span class="tag">API</span>
                         </div>
-                        <a href="somafm-mobile.html" class="project-link" onclick="event.stopPropagation(); navigateWithMatrix('somafm-mobile.html')">Detayları Gör</a>
+                        <a href="somafm-mobile.html" class="project-link">Detayları Gör</a>
                     </div>
                 </div>
 
-                <!-- Proje 5: Placeholder -->
                 <div class="project-card" onclick="navigateWithMatrix('project5.html')">
                     <img src="img/project5.jpg" alt="Proje 5" class="project-image">
                     <div class="project-content">
@@ -785,11 +841,10 @@
                             <span class="tag">Coming Soon</span>
                             <span class="tag">2025</span>
                         </div>
-                        <a href="project5.html" class="project-link" onclick="event.stopPropagation(); navigateWithMatrix('project5.html')">Detayları Gör</a>
+                        <a href="project5.html" class="project-link">Detayları Gör</a>
                     </div>
                 </div>
 
-                <!-- Proje 6: Placeholder -->
                 <div class="project-card" onclick="navigateWithMatrix('project6.html')">
                     <img src="img/project6.jpg" alt="Proje 6" class="project-image">
                     <div class="project-content">
@@ -799,7 +854,7 @@
                             <span class="tag">Coming Soon</span>
                             <span class="tag">Innovation</span>
                         </div>
-                        <a href="project6.html" class="project-link" onclick="event.stopPropagation(); navigateWithMatrix('project6.html')">Detayları Gör</a>
+                        <a href="project6.html" class="project-link">Detayları Gör</a>
                     </div>
                 </div>
 
@@ -855,7 +910,7 @@
                 </p>
                 <div class="contact-links">
                     <a href="mailto:heybo34@gmail.com" class="contact-btn">E-posta</a>
-                    <a href="https://github.com/berkesongul" class="contact-btn" target="_blank">GitHub</a>
+                    <a href="https://github.com/berkesongul" class="contact-btn" target="_blank">GıtHub</a>
                     <a href="https://wa.me/905538241340" class="contact-btn" target="_blank">WhatsApp</a>
                     <a href="https://instagram.com/berkesongul97" class="contact-btn" target="_blank">Instagram</a>
                 </div>
@@ -863,7 +918,16 @@
         </div>
     </section>
 
+    <footer>
+        <div class="footer-content">
+            <p id="copyright">© 2025 Berke Songul. Tüm hakları gizlidir.</p> 
+            <p>Geliştirici: Berke Songul <a href=""></a>
+    </footer>
+
     <script>
+        // Telif hakkı yılını otomatik olarak ayarla
+        document.getElementById('copyright').textContent = `© ${new Date().getFullYear()} Berke Songul. Tüm hakları gizlidir.`;
+
         // Parçacık animasyonu - Matrix stili yeşil
         const canvas = document.getElementById('particles');
         const ctx = canvas.getContext('2d');
@@ -951,18 +1015,27 @@
             });
         });
 
-        // Matrix Rain Transition
+        // Matrix Rain Transition (Düzeltildi)
         function navigateWithMatrix(url) {
-            const matrixCanvas = document.getElementById('matrix-transition');
+            const container = document.getElementById('matrix-transition-container');
+            
+            // Eğer daha önce oluşturulmuş bir canvas varsa kaldır
+            let matrixCanvas = document.getElementById('dynamic-matrix-canvas');
+            if (matrixCanvas) {
+                matrixCanvas.remove();
+            }
+
+            // Dinamik olarak yeni canvas oluştur ve kapsayıcıya ekle
+            matrixCanvas = document.createElement('canvas');
+            matrixCanvas.id = 'dynamic-matrix-canvas';
+            container.appendChild(matrixCanvas);
+            
             const matrixCtx = matrixCanvas.getContext('2d');
             matrixCanvas.width = window.innerWidth;
             matrixCanvas.height = window.innerHeight;
 
-            const overlay = document.createElement('div');
-            overlay.id = 'matrix-transition';
-            overlay.className = 'active';
-            document.body.appendChild(overlay);
-            overlay.appendChild(matrixCanvas);
+            // Container'ı etkinleştir
+            container.classList.add('active');
 
             const columns = Math.floor(matrixCanvas.width / 20);
             const drops = Array(columns).fill(1);
