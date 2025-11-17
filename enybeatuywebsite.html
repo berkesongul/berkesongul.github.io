@@ -1,11 +1,12 @@
+<!-- ...existing code... -->
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soma FM Mobile App - Berke Songul</title>
-    
+    <title>ENY Beauty Web Sitesi</title>
     <style>
+        /* ...existing code... */
         * {
             margin: 0;
             padding: 0;
@@ -30,6 +31,7 @@
             line-height: 1.6;
         }
 
+        /* Scanline efekti */
         body::before {
             content: '';
             position: fixed;
@@ -48,6 +50,7 @@
             z-index: 9999;
         }
 
+        /* Grid arka plan */
         body::after {
             content: '';
             position: fixed;
@@ -81,25 +84,7 @@
             border-bottom: 2px solid var(--accent-green);
             box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
         }
-        
-        #matrix-transition-container { 
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            z-index: 10000;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
 
-        #matrix-transition-container.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        
         nav ul {
             display: flex;
             justify-content: center;
@@ -156,7 +141,7 @@
         }
 
         .hero-title {
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: 900;
             color: var(--accent-green);
             text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
@@ -286,6 +271,40 @@
             margin-bottom: 0.5rem;
         }
 
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 255, 65, 0.05);
+            border: 2px solid var(--accent-green);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.4);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--accent-green);
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
         .tech-tags {
             display: flex;
             flex-wrap: wrap;
@@ -347,65 +366,10 @@
             box-shadow: 0 0 25px var(--accent-green);
             transform: translateY(-3px);
         }
-        
-        footer {
-            background: var(--bg-secondary);
-            padding: 1.5rem 2rem;
-            text-align: center;
-            border-top: 2px solid var(--accent-green);
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-top: 5rem;
-        }
-
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-content p {
-            margin: 0.5rem 0;
-        }
-
-        .footer-content a {
-            color: var(--accent-green);
-            text-decoration: none;
-            transition: color 0.3s, text-shadow 0.3s;
-        }
-
-        .footer-content a:hover {
-            color: var(--accent-green-light);
-            text-shadow: 0 0 10px var(--accent-green);
-        }
-
-        footer::before {
-            content: '';
-            display: block;
-            width: 100%;
-            height: 1px;
-            background: repeating-linear-gradient(
-                90deg,
-                var(--accent-green) 0%,
-                transparent 1%,
-                transparent 2%
-            );
-            margin-bottom: 1rem;
-            animation: scanlineMove 10s linear infinite;
-        }
-
-        @keyframes scanlineMove {
-            0% { background-position: 0% 0; }
-            100% { background-position: 100% 0; }
-        }
 
         @media (max-width: 768px) {
             .hero-title {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
 
             .hero-subtitle {
@@ -424,16 +388,15 @@
             .feature-grid {
                 grid-template-columns: 1fr;
             }
-            
-            footer {
-                padding: 1rem;
+
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <canvas id="particles"></canvas>
-    <div id="matrix-transition-container"></div>
     
     <nav>
         <ul>
@@ -447,90 +410,137 @@
 
     <div class="project-hero">
         <div class="hero-content">
-            <h1 class="hero-title">SOMA FM MOBİL UYGULAMASI</h1>
-            <p class="hero-subtitle">Çapraz Platform (iOS & Android) Radyo İstemcisi</p>
-            <img src="img/somafm-mobile.jpg" alt="Soma FM Mobil Uygulama Arayüzü" class="hero-image">
+            <h1 class="hero-title">ENY Beauty Web Sitesi</h1>
+            <p class="hero-subtitle">ENY Beauty markası için modern, mobil öncelikli ve dönüşüm odaklı kurumsal web sitesi tasarımı ve geliştirmesi.</p>
+            <img src="img/enybeautywebsite.jpg" alt="ENY Beauty Web Site" class="hero-image">
         </div>
     </div>
 
     <div class="project-content">
         
         <div class="content-section">
-            <h2 class="section-title">Proje Özeti</h2>
+            <h2 class="section-title">Proje Hakkında</h2>
             <p class="content-text">
-                Soma FM radyo yayınlarını dinleyicilere mobil ortamda kesintisiz sunmak amacıyla geliştirilen bu uygulama, modern bir kullanıcı deneyimi hedefler. **React Native** altyapısı sayesinde tek bir kod tabanından hem iOS hem de Android cihazlar için optimize edilmiştir.
+                ENY Beauty için hazırlanan web sitesi, marka kimliğini güçlendiren sade ve şık bir görsel dil ile tasarlandı. Amaç, ziyaretçilerin ürünleri hızlıca keşfetmesini sağlamak, randevu ve iletişim formlarını öne çıkararak dönüşüm oranlarını artırmaktır.
             </p>
             <p class="content-text">
-                Proje, web sürümünden farklı olarak, mobil cihazların yerel yeteneklerini (arka planda çalma, bildirimler, offline önbellekleme) kullanarak çok daha stabil ve cihaz dostu bir dinleme deneyimi sunar.
+                Site tamamen responsive olup mobilde hızlı yükleme ve akıcı kullanıcı deneyimi sunar. Ürün kataloğu, hizmet açıklamaları, müşteri yorumları ve sıkça sorulan sorular bölümleri içerir. Görseller optimize edilerek sayfa hızları iyileştirildi.
+            </p>
+            <p class="content-text">
+                Teknik olarak SEO temelli yapılandırma (meta etiketler, semantik HTML, hızlı yüklenen görseller) ve temel erişilebilirlik iyileştirmeleri yapıldı. Ayrıca siteye Google Analytics ve Meta Pixel entegre edilerek pazarlama verileri ölçülebilir hale getirildi.
+            </p>
+            <p class="content-text">
+                Proje kapsamında hem görsel hem içerik stratejisi geliştirildi; marka renkleri, tipografi ve görsel dil tutarlı bir şekilde uygulandı.
             </p>
         </div>
 
         <div class="content-section">
-            <h2 class="section-title">Temel Özellikler</h2>
+            <h2 class="section-title">Öne Çıkan Özellikler</h2>
             <div class="feature-grid">
                 <div class="feature-item">
-                    <h3 class="feature-title">Arka Planda Çalma ve Kontroller</h3>
-                    <p class="content-text">Uygulama arka planda sorunsuz çalışır; kilit ekranı ve bildirim çubuğu üzerinden kontrol imkanı sunar.</p>
+                    <h3 class="feature-title">Temiz ve Minimal Tasarım</h3>
+                    <p class="content-text">Karmaşadan uzak, ürünleri ön plana çıkaran sade arayüz. Kullanıcıların hızlıca karar vermesini sağlayan düzen.</p>
                 </div>
                 <div class="feature-item">
-                    <h3 class="feature-title">Firebase Entegrasyonu</h3>
-                    <p class="content-text">Kullanıcı ayarlarını, favori kanalları ve bildirim tercihlerini yönetmek için Firebase kullanıldı.</p>
+                    <h3 class="feature-title">Hızlı Mobil Deneyim</h3>
+                    <p class="content-text">Mobil öncelikli tasarım ve resim optimizasyonlarıyla düşük veri kullanımında bile hızlı performans.</p>
                 </div>
                 <div class="feature-item">
-                    <h3 class="feature-title">Hızlı Başlatma ve Düşük Gecikme</h3>
-                    <p class="content-text">React Native'in performansı ve optimize edilmiş kod ile hızlı başlatma süreleri elde edildi.</p>
+                    <h3 class="feature-title">Kolay Ürün Yönetimi</h3>
+                    <p class="content-text">Kategori, ürün ve kampanya içeriklerinin kolayca güncellenebileceği yönetim tavsiyeleri sağlandı.</p>
                 </div>
                 <div class="feature-item">
-                    <h3 class="feature-title">Gelişmiş Kanal Bilgileri</h3>
-                    <p class="content-text">Canlı yayın akışına ait güncel parça adı, sanatçı ve yayın bilgileri anlık olarak güncellenir.</p>
+                    <h3 class="feature-title">SEO & Analitik Entegrasyonu</h3>
+                    <p class="content-text">Temel SEO ayarları uygulandı; Google Analytics ve Meta Pixel ile dönüşüm takibi kuruldu.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Randevu & İletişim Formları</h3>
+                    <p class="content-text">Hızlı randevu alma ve iletişim formları ile müşteri etkileşimi artırıldı, spam koruması eklendi.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Güvenlik ve Yedekleme Önerileri</h3>
+                    <p class="content-text">SSL, temel güvenlik kontrolleri ve düzenli yedekleme süreçleri için rehberlik sağlandı.</p>
                 </div>
             </div>
         </div>
 
         <div class="content-section">
-            <h2 class="section-title">Teknik Yaklaşım</h2>
+            <h2 class="section-title">Çalışma Süreci</h2>
             <p class="content-text">
-                React Native seçimi, hızlı geliştirme döngüsü ve çapraz platform esnekliği sağladı. Uygulama tasarımı, web temasındaki fütüristik/siberpunk hissi koruyarak, mobil UX (Kullanıcı Deneyimi) standartlarına uygun hale getirildi. 
+                Proje üç ana aşamada yürütüldü: keşif ve analiz, tasarım ve geliştirme, test ve yayına alma. Her aşamada müşteri onayı alındı ve canlı testlerle geri bildirim süreci işletildi.
             </p>
             <p class="content-text">
-                Ses akışını yönetmek için yerel modüller entegre edilerek, yayın kesintileri en aza indirildi ve güvenilir bir medya oynatma deneyimi garanti edildi.
+                <strong>1. Keşif & Analiz:</strong> Marka hedefleri, hedef kitle ve mevcut içerikler analiz edildi. Rakip analiziyle site hedefleri netleştirildi.
+            </p>
+            <p class="content-text">
+                <strong>2. Tasarım:</strong> Wireframe ve yüksek çözünürlüklü mockuplar hazırlandı. Renk paleti, tipografi ve görsel stil onayı alındı.
+            </p>
+            <p class="content-text">
+                <strong>3. Geliştirme & Test:</strong> Hızlı ve temiz HTML/CSS/JS ile site geliştirildi; erişilebilirlik ve performans testleri yapıldı. Tarayıcı uyumluluğu kontrol edildi.
+            </p>
+            <p class="content-text">
+                <strong>4. Yayın & Eğitim:</strong> Site canlıya alındı ve içerik yönetimi için kısa bir eğitim, bakım ve güncelleme önerileri sağlandı.
             </p>
         </div>
 
         <div class="content-section">
-            <h2 class="section-title">Kullanılan Teknolojiler</h2>
+            <h2 class="section-title">Kullanılan Platformlar & Araçlar</h2>
             <div class="tech-tags">
-                <span class="tech-tag">React Native</span>
-                <span class="tech-tag">JavaScript / TypeScript</span>
-                <span class="tech-tag">Firebase</span>
-                <span class="tech-tag">Native Modules (Audio)</span>
-                <span class="tech-tag">Soma FM API</span>
-                <span class="tech-tag">iOS & Android</span>
+                <span class="tech-tag">HTML5 & CSS3</span>
+                <span class="tech-tag">Vanilla JS</span>
+                <span class="tech-tag">Google Analytics</span>
+                <span class="tech-tag">Meta Pixel</span>
+                <span class="tech-tag">Canva </span>
+                <span class="tech-tag">Wordpress</span>
+                <span class="tech-tag">Git & GitHub</span>
+                <span class="tech-tag">Hostinger Hosting</span>
             </div>
         </div>
-        
+
         <div class="content-section">
-            <h2 class="section-title">Gelecek Planları</h2>
+            <h2 class="section-title">Başarılar & Sonuçlar</h2>
             <p class="content-text">
-                Gelecekteki güncellemeler, önbellekleme sayesinde gelişmiş dinleme yetenekleri, kişiselleştirilmiş çalma listeleri ve uyku zamanlayıcısı gibi ek yerel özellikler içerecektir. Uygulamanın performansını daha da artırmak için düzenli optimizasyonlar yapılacaktır.
+                Proje yayına alındıktan sonra ilk 3 ay içinde organik ziyaretlerde anlamlı artış gözlendi; sosyal kampanyalarla dönüşüm oranlarında iyileşme sağlandı.
+            </p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">+75%</div>
+                    <div class="stat-label">Mobil Trafik Artışı</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">+45%</div>
+                    <div class="stat-label">İletişim Formu Dönüşümleri</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Hız: 98</div>
+                    <div class="stat-label">Lighthouse Performans Skoru</div>
+                </div>
+            </div>
+            <p class="content-text" style="margin-top:1rem;">
+                Bu sonuçlar yapılan optimizasyonlar, hedefli içerik yerleşimi ve reklam takibi entegrasyonları sayesinde elde edildi.
             </p>
         </div>
 
-        <a href="#" class="back-button" onclick="navigateWithMatrix('index.html#projects'); return false;">
-            ← Ana Sayfaya Dön
-        </a>
+        <div class="content-section">
+            <h2 class="section-title">İletişime Geçin</h2>
+            <p class="content-text">
+                ENY Beauty veya benzer projeler için teklif almak, siteyi güncellemek veya bakım hizmetleri hakkında bilgi edinmek isterseniz iletişime geçin.
+            </p>
+            <p class="content-text">
+                E-posta: <a href="mailto:heybo34@gmail.com" style="color:var(--accent-green); text-decoration:underline;">heybo34@gmail.com</a><br>
+                Telefon: +90 553 824 1340
+            </p>
+            <p class="content-text">
+                İsterseniz canlı demo için zaman planlayabilir veya mevcut sitenin ücretsiz kısa bir denetimini talep edebilirsiniz.
+            </p>    
+        </div>
+
+        <a href="index.html#projects" class="back-button">← Ana Sayfaya Dön</a>
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <p id="copyright">© 2025 Berke Songul. Tüm hakları gizlidir.</p> 
-            <p>Bu site, Berke Sonngul tarafından geliştirilmiştir.</p>
-        </div>
-    </footer>
-
     <script>
-        document.getElementById('copyright').textContent = "© " + new Date().getFullYear() + " Berke Songul. Tüm hakları gizlidir.";
-
+        // ...existing code...
+        // Parçacık animasyonu
         const canvas = document.getElementById('particles');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -583,7 +593,7 @@
                     const distance = Math.sqrt(dx * dx + dy * dy);
 
                     if (distance < 100) {
-                        ctx.strokeStyle = "rgba(0, 255, 65, " + (0.2 * (1 - distance / 100)) + ")";
+                        ctx.strokeStyle = `rgba(0, 255, 65, ${0.2 * (1 - distance / 100)})`;
                         ctx.lineWidth = 0.5;
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
@@ -602,49 +612,6 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         });
-        
-        function navigateWithMatrix(url) {
-            const container = document.getElementById('matrix-transition-container');
-            
-            let matrixCanvas = document.createElement('canvas');
-            matrixCanvas.id = 'dynamic-matrix-canvas';
-            container.appendChild(matrixCanvas);
-            
-            const matrixCtx = matrixCanvas.getContext('2d');
-            matrixCanvas.width = window.innerWidth;
-            matrixCanvas.height = window.innerHeight;
-
-            container.classList.add('active');
-
-            const columns = Math.floor(matrixCanvas.width / 20);
-            const drops = Array(columns).fill(1);
-            const chars = '0100100100101000010010010010010010101000100101010101010010010101010';
-
-            function drawMatrix() {
-                matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-
-                matrixCtx.fillStyle = '#00ff41';
-                matrixCtx.font = '15px monospace';
-
-                for (let i = 0; i < drops.length; i++) {
-                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                    matrixCtx.fillText(text, i * 20, drops[i] * 20);
-
-                    if (drops[i] * 20 > matrixCanvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            }
-
-            const interval = setInterval(drawMatrix, 33);
-
-            setTimeout(() => {
-                clearInterval(interval);
-                window.location.href = url;
-            }, 1000);
-        }
     </script>
 </body>
 </html>
